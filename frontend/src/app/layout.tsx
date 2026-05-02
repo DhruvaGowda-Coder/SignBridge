@@ -15,17 +15,28 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "SignBridge | Real-time Sign Language Translator",
   description: "A full-stack real-time Sign Language to Text web application using ML, MediaPipe, and Next.js. Translate hand signs to text instantly via your webcam.",
+  metadataBase: new URL("https://signbridge.vercel.app"),
   openGraph: {
     title: "SignBridge — Real-time Sign Language Translator",
     description: "Translate hand signs to text in real-time using your webcam, powered by MediaPipe and machine learning.",
     type: "website",
     locale: "en_US",
     siteName: "SignBridge",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SignBridge — Real-time Sign Language Translator powered by MediaPipe & ML",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SignBridge — Real-time Sign Language Translator",
     description: "Translate hand signs to text in real-time using your webcam, powered by MediaPipe and machine learning.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
