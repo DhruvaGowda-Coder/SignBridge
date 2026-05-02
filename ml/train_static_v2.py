@@ -86,32 +86,32 @@ def main():
     results['MLP'] = (mlp, mlp_acc, mlp_size, mlp_time)
 
     # ── 2. Gradient Boosting (benchmark) ───────────────────────────────
-    print("\n2/3 Training Gradient Boosting (benchmark)...")
-    t0 = time.time()
-    gb = HistGradientBoostingClassifier(
-        max_iter=200, max_depth=6, learning_rate=0.1,
-        min_samples_leaf=10, random_state=42
-    )
-    gb.fit(X_train, y_train)
-    gb_time = time.time() - t0
-    gb_acc = gb.score(X_test, y_test)
-    gb_size = get_model_size_mb(gb)
-    print(f"    Accuracy: {gb_acc:.4f} | Size: {gb_size:.1f} MB | Time: {gb_time:.1f}s")
-    results['GradientBoosting'] = (gb, gb_acc, gb_size, gb_time)
+    print("\n2/3 Skipping Gradient Boosting (benchmark)...")
+    # t0 = time.time()
+    # gb = HistGradientBoostingClassifier(
+    #     max_iter=200, max_depth=6, learning_rate=0.1,
+    #     min_samples_leaf=10, random_state=42
+    # )
+    # gb.fit(X_train, y_train)
+    # gb_time = time.time() - t0
+    # gb_acc = gb.score(X_test, y_test)
+    # gb_size = get_model_size_mb(gb)
+    # print(f"    Accuracy: {gb_acc:.4f} | Size: {gb_size:.1f} MB | Time: {gb_time:.1f}s")
+    # results['GradientBoosting'] = (gb, gb_acc, gb_size, gb_time)
 
     # ── 3. Random Forest (benchmark, but skip saving if huge) ──────────
-    print("\n3/3 Training Random Forest (benchmark, 100 trees)...")
-    t0 = time.time()
-    rf = RandomForestClassifier(
-        n_estimators=100, max_depth=25, min_samples_split=5,
-        random_state=42, n_jobs=-1
-    )
-    rf.fit(X_train, y_train)
-    rf_time = time.time() - t0
-    rf_acc = rf.score(X_test, y_test)
-    rf_size = get_model_size_mb(rf)
-    print(f"    Accuracy: {rf_acc:.4f} | Size: {rf_size:.1f} MB | Time: {rf_time:.1f}s")
-    results['RandomForest'] = (rf, rf_acc, rf_size, rf_time)
+    print("\n3/3 Skipping Random Forest (benchmark, 100 trees)...")
+    # t0 = time.time()
+    # rf = RandomForestClassifier(
+    #     n_estimators=100, max_depth=25, min_samples_split=5,
+    #     random_state=42, n_jobs=-1
+    # )
+    # rf.fit(X_train, y_train)
+    # rf_time = time.time() - t0
+    # rf_acc = rf.score(X_test, y_test)
+    # rf_size = get_model_size_mb(rf)
+    # print(f"    Accuracy: {rf_acc:.4f} | Size: {rf_size:.1f} MB | Time: {rf_time:.1f}s")
+    # results['RandomForest'] = (rf, rf_acc, rf_size, rf_time)
 
     # ── Model Selection (accuracy vs size tradeoff) ────────────────────
     print("\n" + "=" * 60)
@@ -130,16 +130,9 @@ def main():
     # Smart selection: prefer MLP if within 1% of the best accuracy
     # because it's 100-5000x smaller and faster at inference
     mlp_acc = results['MLP'][1]
-    if best_name != 'MLP' and (best_acc - mlp_acc) < 0.01:
-        print(f"\n  MLP is within {(best_acc - mlp_acc)*100:.2f}% of {best_name}")
-        print(f"  but {results[best_name][2]/results['MLP'][2]:.0f}x smaller!")
-        print(f"  >>> Selecting MLP for production (size + speed wins)")
-        selected_name = 'MLP'
-    else:
-        selected_name = best_name if results[best_name][2] < 500 else 'MLP'
-        if selected_name != best_name:
-            print(f"\n  {best_name} is too large ({results[best_name][2]:.0f}MB) for production")
-            print(f"  >>> Selecting MLP instead ({results['MLP'][2]:.1f}MB)")
+    
+    print(f"  >>> Selecting MLP for production (size + speed wins)")
+    selected_name = 'MLP'
 
     selected_model = results[selected_name][0]
     selected_acc = results[selected_name][1]

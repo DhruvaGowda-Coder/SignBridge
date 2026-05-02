@@ -43,6 +43,11 @@ def main():
     separator("1. DATASET OVERVIEW")
     
     df = pd.read_csv(csv_path)
+    # Filter out classes with too few samples (e.g., 'nothing' or 'space' which lack clear hands)
+    class_counts = df['label'].value_counts()
+    valid_classes = class_counts[class_counts >= 10].index
+    df = df[df['label'].isin(valid_classes)]
+    
     n_samples, n_features = df.shape[0], df.shape[1] - 1  # minus label column
     n_classes = df['label'].nunique()
     

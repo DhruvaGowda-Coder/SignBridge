@@ -10,6 +10,7 @@ import { predictStatic, PredictionResult } from "@/lib/api";
 
 export default function Home() {
   const [sensitivity, setSensitivity] = useState<number>(5);
+  const [confidenceThreshold, setConfidenceThreshold] = useState<number>(0.65);
   const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
   
   const [currentPrediction, setCurrentPrediction] = useState<PredictionResult | null>(null);
@@ -110,7 +111,7 @@ export default function Home() {
       setRawPrediction(null);
     }
     
-    if (res && res.confidence > 0.6 && res.label.length === 1) {
+    if (res && res.confidence > (confidenceThreshold - 0.05) && res.label.length === 1) {
       setCurrentPrediction(res);
 
       // If we have a locked letter, check if user changed gesture
@@ -137,7 +138,7 @@ export default function Home() {
         recentPredictionsRef.current.shift();
       }
       
-      const isHighConfidence = res.confidence >= 0.65; // Write quickly if confidence is >= 65%
+      const isHighConfidence = res.confidence >= confidenceThreshold; // Dynamic UI threshold
       const reachedSensitivity = recentPredictionsRef.current.length === sensitivity;
       const matchCount = recentPredictionsRef.current.filter(val => val === res.label).length;
       const mostlySame = reachedSensitivity && (matchCount >= Math.max(1, sensitivity - 1));
@@ -179,6 +180,8 @@ export default function Home() {
             <ControlPanel 
               sensitivity={sensitivity}
               setSensitivity={setSensitivity}
+              confidenceThreshold={confidenceThreshold}
+              setConfidenceThreshold={setConfidenceThreshold}
               showSkeleton={showSkeleton}
               setShowSkeleton={setShowSkeleton}
             />
@@ -195,6 +198,7 @@ export default function Home() {
             />
             <SentenceBuilder 
               sentence={sentence}
+              onChange={setSentence}
               onClear={() => setSentence("")}
               onBackspace={() => setSentence(prev => prev.slice(0, -1))}
               onSpace={() => setSentence(prev => prev + " ")}
