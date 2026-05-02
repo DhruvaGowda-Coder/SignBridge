@@ -15,7 +15,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "SignBridge | Real-time Sign Language Translator",
   description: "A full-stack real-time Sign Language to Text web application using ML, MediaPipe, and Next.js. Translate hand signs to text instantly via your webcam.",
-  metadataBase: new URL("https://signbridge.vercel.app"),
+  metadataBase: new URL("https://frontend-ten-omega-j8yyc1j2dr.vercel.app"),
   openGraph: {
     title: "SignBridge — Real-time Sign Language Translator",
     description: "Translate hand signs to text in real-time using your webcam, powered by MediaPipe and machine learning.",
