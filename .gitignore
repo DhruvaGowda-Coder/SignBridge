@@ -33,3 +33,4 @@ ml/data/
 .DS_Store
 Thumbs.db
 *.log
+dev-server.log

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import WebcamFeed from "@/components/WebcamFeed";
 import SignOutput from "@/components/SignOutput";
 import SentenceBuilder from "@/components/SentenceBuilder";
@@ -11,6 +11,12 @@ import { predictStatic, PredictionResult } from "@/lib/api";
 export default function Home() {
   const [sensitivity, setSensitivity] = useState<number>(5);
   const [confidenceThreshold, setConfidenceThreshold] = useState<number>(0.65);
+  const confidenceThresholdRef = useRef(confidenceThreshold);
+  
+  useEffect(() => {
+    confidenceThresholdRef.current = confidenceThreshold;
+  }, [confidenceThreshold]);
+
   const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
   
   const [currentPrediction, setCurrentPrediction] = useState<PredictionResult | null>(null);
@@ -111,7 +117,7 @@ export default function Home() {
       setRawPrediction(null);
     }
     
-    if (res && res.confidence > (confidenceThreshold - 0.05) && res.label.length === 1) {
+    if (res && res.confidence > (confidenceThresholdRef.current - 0.05) && res.label.length === 1) {
       setCurrentPrediction(res);
 
       // If we have a locked letter, check if user changed gesture
@@ -138,7 +144,7 @@ export default function Home() {
         recentPredictionsRef.current.shift();
       }
       
-      const isHighConfidence = res.confidence >= confidenceThreshold; // Dynamic UI threshold
+      const isHighConfidence = res.confidence >= confidenceThresholdRef.current; // Dynamic UI threshold
       const reachedSensitivity = recentPredictionsRef.current.length === sensitivity;
       const matchCount = recentPredictionsRef.current.filter(val => val === res.label).length;
       const mostlySame = reachedSensitivity && (matchCount >= Math.max(1, sensitivity - 1));

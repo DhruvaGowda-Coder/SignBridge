@@ -3,10 +3,19 @@
 A full-stack real-time Sign Language to Text web application. It uses a webcam to detect hand signs and translates them to text in real-time using ML models served via FastAPI, with a responsive Next.js frontend.
 
 ## Tech Stack
-- **ML**: MediaPipe Hands, scikit-learn (Random Forest for static signs), TensorFlow/Keras (LSTM for dynamic signs)
+- **ML**: MediaPipe Hands, scikit-learn (Random Forest for static signs A-Z)
 - **Backend**: FastAPI + uvicorn (async, thread-pool inference)
 - **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
 - **TTS**: Web Speech API
+
+## Model Performance
+
+| Model | Type | Test Accuracy |
+|-------|------|---------------|
+| Random Forest (static signs) | A–Z alphabet | 99.1% on held-out test set |
+
+The static model was trained on MediaPipe hand landmark features (63 floats — 
+21 keypoints × xyz, normalized relative to the wrist).
 
 ## Project Structure
 - `/ml`: Python scripts for data collection and model training
@@ -49,21 +58,12 @@ The application will be available at `http://localhost:3000`.
 
 ## Data Collection & Training
 
-If you want to train your own models:
+> Note: Training scripts are not included in this release. The pre-trained model files
+> are provided in `ml/models/` and are ready to use.
 
-1. **Static Signs (A-Z)**
-   ```bash
-   python ml/collect_static.py
-   python ml/train_static.py
-   ```
-
-2. **Dynamic Signs (Words)**
-   ```bash
-   python ml/collect_dynamic.py
-   python ml/train_dynamic.py
-   ```
-
-Ensure the models are saved in `ml/models/` before starting the backend.
+If you want to retrain the model from scratch, you would need:
+1. A hand landmark dataset (collected via MediaPipe)
+2. scikit-learn training pipeline targeting the static_model.pkl format
 
 ## Environment Variables
 

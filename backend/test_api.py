@@ -8,11 +8,3 @@ try:
     print("Static Response:", r.json())
 except Exception as e:
     print("Static Error:", e)
-
-# Test dynamic
-dynamic_data = {"sequence": [[random.random() for _ in range(63)] for _ in range(30)]}
-try:
-    r = requests.post("http://localhost:8000/predict/dynamic", json=dynamic_data)
-    print("Dynamic Response:", r.json())
-except Exception as e:
-    print("Dynamic Error:", e)
