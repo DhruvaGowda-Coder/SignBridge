@@ -7,6 +7,8 @@ import SentenceBuilder from "@/components/SentenceBuilder";
 import ControlPanel from "@/components/ControlPanel";
 import GestureHints from "@/components/GestureHints";
 import { predictStatic, PredictionResult } from "@/lib/api";
+import Image from "next/image";
+import logo from "./icon.png";
 
 export default function Home() {
   const [sensitivity, setSensitivity] = useState<number>(5);
@@ -166,11 +168,20 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white p-4 md:p-8 font-sans selection:bg-[#00ff88] selection:text-black">
       <header className="max-w-7xl mx-auto mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-[#00ff88]">
-            SignBridge <span className="text-[#00ff88]">🧏</span>
-          </h1>
-          <p className="text-neutral-400 mt-1 font-medium">Real-time Sign Language Translator</p>
+        <div className="flex items-center gap-4">
+          <Image 
+            src={logo} 
+            alt="SignBridge Logo" 
+            width={56} 
+            height={56} 
+            className="rounded-xl shadow-[0_0_20px_rgba(0,255,136,0.2)] border border-[#00ff88]/20"
+          />
+          <div>
+            <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-[#00ff88]">
+              SignBridge
+            </h1>
+            <p className="text-neutral-400 mt-1 font-medium">Real-time Sign Language Translator</p>
+          </div>
         </div>
       </header>
 
