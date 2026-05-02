@@ -5,7 +5,7 @@ import numpy as np
 
 logger = logging.getLogger("signbridge.predictor")
 
-MODELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml', 'models')
+MODELS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'models')
 
 class StaticPredictor:
     def __init__(self):
