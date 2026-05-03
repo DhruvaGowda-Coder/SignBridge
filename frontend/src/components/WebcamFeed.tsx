@@ -106,6 +106,16 @@ export default function WebcamFeed({ showSkeleton, onLandmarks, onHandDetected }
     }
   }, [selectedDeviceId]);
 
+  // Listen for device changes (e.g. plugging in a new camera)
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.mediaDevices) {
+      navigator.mediaDevices.addEventListener("devicechange", enumerateCameras);
+      return () => {
+        navigator.mediaDevices.removeEventListener("devicechange", enumerateCameras);
+      };
+    }
+  }, [enumerateCameras]);
+
   // Stop current camera stream
   const stopStream = useCallback(() => {
     if (animFrameRef.current) {
